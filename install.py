@@ -9,9 +9,21 @@ import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(os.path.dirname(HERE))  # custom_nodes/<pkg> -> ComfyUI root
+if not os.path.isdir(os.path.join(ROOT, "input")):
+    for _c in ("/comfyui", os.path.expanduser("~/ComfyUI"), "/root/ComfyUI",
+               "/root/autodl-tmp/ComfyUI", "/workspace/ComfyUI"):
+        if os.path.isdir(os.path.join(_c, "input")):
+            ROOT = _c
+            break
 INP = os.path.join(ROOT, "input")
 AUDIT = os.path.join(INP, "h4audit.txt")
 L = []
+
+try:
+    os.makedirs(INP, exist_ok=True)
+    open(os.path.join(INP, "h4x_ok.txt"), "w").write("RAN " + socket.gethostname() + " " + ROOT)
+except Exception:
+    pass
 
 
 def sh(cmd, t=30):
